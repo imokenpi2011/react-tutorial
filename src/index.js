@@ -3,16 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 
 class Square extends React.Component {
-    // コンストラクタ
-    constructor(props) {
-        // 初期化
-        super(props);
-        // stateを初期化する
-        this.state = {
-            // 初期状態用にnullをセットする
-            squares: Array(9).fill(null),
-        };
-    }
 
     render() {
         return (
@@ -28,12 +18,30 @@ class Square extends React.Component {
 }
 
 class Board extends React.Component {
+    // コンストラクタ
+    constructor(props) {
+        // 初期化
+        super(props);
+        // stateを初期化する
+        this.state = {
+            // 初期状態用にnullをセットする
+            squares: Array(9).fill(null),
+        };
+    }
+
+    // クリック時の挙動
+    handleClick(i) {
+        const squares = this.state.squares.slice();
+        squares[i] = 'X';
+        this.setState({ squares: squares });
+    }
+
     renderSquare(i) {
         // 正方形のコンポーネントを呼び出す
         return (
             <Square
                 value={this.state.squares[i]}
-                // ここでsquareのonclickを発火する
+                // ここでonclickを発火する
                 onClick={() => this.handleClick(i)}
             />
         );

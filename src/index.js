@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
+// クリックされたらボードにイベントを伝搬する
 class Square extends React.Component {
 
     render() {
@@ -17,6 +18,7 @@ class Square extends React.Component {
     }
 }
 
+// ゲームの状態を管理する
 class Board extends React.Component {
     // コンストラクタ
     constructor(props) {
@@ -31,17 +33,21 @@ class Board extends React.Component {
 
     // クリック時の挙動
     handleClick(i) {
+        // sliceメソッドを使って配列をコピーしている
+        // これはイミュータビリティと言って直接ではなく新しい値によって上書きすること
+        // 値を上書きしないので履歴の巻き戻しが容易になる
         const squares = this.state.squares.slice();
         squares[i] = 'X';
         this.setState({ squares: squares });
     }
 
+    // レンダリング
     renderSquare(i) {
         // 正方形のコンポーネントを呼び出す
         return (
             <Square
                 value={this.state.squares[i]}
-                // ここでonclickを発火する
+                // ここでonclickを発火するよう登録する
                 onClick={() => this.handleClick(i)}
             />
         );

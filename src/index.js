@@ -3,19 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 
 // クリックされたらボードにイベントを伝搬する
-class Square extends React.Component {
-
-    render() {
-        return (
-            // 渡された値を表示する
-            // クリックされた場合はonClickを発火する
-            <button className="square"
-                onClick={() => this.props.onClick()}
-            >
-                {this.props.value}
-            </button>
-        );
-    }
+// stateを持たないコンポーネントは関数で定義する
+function Square(props) {
+    return (
+        // 渡された値を表示する
+        // クリックされた場合はonClickを発火する
+        <button className="square"
+            onClick={() => props.onClick()}
+        >
+            {this.props.value}
+        </button>
+    );
 }
 
 // ゲームの状態を管理する

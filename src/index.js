@@ -11,7 +11,7 @@ function Square(props) {
         <button className="square"
             onClick={() => props.onClick()}
         >
-            {this.props.value}
+            {props.value}
         </button>
     );
 }
@@ -26,6 +26,8 @@ class Board extends React.Component {
         this.state = {
             // 初期状態用にnullをセットする
             squares: Array(9).fill(null),
+            // 初手をX空に設定する
+            xIsNext: true,
         };
     }
 
@@ -35,8 +37,14 @@ class Board extends React.Component {
         // これはイミュータビリティと言って直接ではなく新しい値によって上書きすること
         // 値を上書きしないので履歴の巻き戻しが容易になる
         const squares = this.state.squares.slice();
-        squares[i] = 'X';
-        this.setState({ squares: squares });
+        // xIsNextがtrueの時はX、そうでない時はOをセットする
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
+
+        // 順番を変えるためxIsNextを反転させる
+        this.setState({
+            squares: squares,
+            xIsNext: !this.state.xIsNext,
+        });
     }
 
     // レンダリング
@@ -52,7 +60,7 @@ class Board extends React.Component {
     }
 
     render() {
-        const status = 'Next player: X';
+        const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
 
         return (
             <div>

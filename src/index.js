@@ -36,9 +36,9 @@ class Board extends React.Component {
         // 正方形のコンポーネントを呼び出す
         return (
             <Square
-                value={this.state.squares[i]}
-                // ここでonclickを発火するよう登録する
-                onClick={() => this.handleClick(i)}
+                value={this.props.squares[i]}
+                // ここでGameのonclickを発火するよう登録する
+                onClick={() => this.props.onClick(i)}
             />
         );
     }

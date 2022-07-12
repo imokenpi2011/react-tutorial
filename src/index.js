@@ -37,6 +37,8 @@ class Board extends React.Component {
         // これはイミュータビリティと言って直接ではなく新しい値によって上書きすること
         // 値を上書きしないので履歴の巻き戻しが容易になる
         const squares = this.state.squares.slice();
+        // 決着がついている場合はリターンする
+        if (calculateWinner(this.state.squares) || squares[i]) return;
         // xIsNextがtrueの時はX、そうでない時はOをセットする
         squares[i] = this.state.xIsNext ? 'X' : 'O';
 

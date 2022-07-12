@@ -31,24 +31,6 @@ class Board extends React.Component {
         };
     }
 
-    // クリック時の挙動
-    handleClick(i) {
-        // sliceメソッドを使って配列をコピーしている
-        // これはイミュータビリティと言って直接ではなく新しい値によって上書きすること
-        // 値を上書きしないので履歴の巻き戻しが容易になる
-        const squares = this.state.squares.slice();
-        // 決着がついている場合はリターンする
-        if (calculateWinner(this.state.squares) || squares[i]) return;
-        // xIsNextがtrueの時はX、そうでない時はOをセットする
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
-
-        // 順番を変えるためxIsNextを反転させる
-        this.setState({
-            squares: squares,
-            xIsNext: !this.state.xIsNext,
-        });
-    }
-
     // レンダリング
     renderSquare(i) {
         // 正方形のコンポーネントを呼び出す
@@ -95,6 +77,29 @@ class Game extends React.Component {
             }],
             xIsNext: true,
         };
+    }
+
+    // クリック時の挙動
+    handleClick(i) {
+        // sliceメソッドを使って配列をコピーしている
+        // これはイミュータビリティと言って直接ではなく新しい値によって上書きすること
+        // 値を上書きしないので履歴の巻き戻しが容易になる
+        const history = this.state.history;
+        const current = history[history.length - 1];
+        const squares = current.squares.slice();
+        // 決着がついている場合はリターンする
+        if (calculateWinner(current.squares) || squares[i]) return;
+        // xIsNextがtrueの時はX、そうでない時はOをセットする
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
+
+        // 順番を変えるためxIsNextを反転させる
+        this.setState({
+            // 本の配列をミューテートしない目的でpush()ではなくconcat()を使用する
+            history: history.concat([{
+                squares: squares,
+            }]),
+            xIsNext: !this.state.xIsNext,
+        });
     }
 
     render() {

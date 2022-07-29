@@ -84,7 +84,7 @@ class Game extends React.Component {
         // sliceメソッドを使って配列をコピーしている
         // これはイミュータビリティと言って直接ではなく新しい値によって上書きすること
         // 値を上書きしないので履歴の巻き戻しが容易になる
-        const history = this.state.history;
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
         // 決着がついている場合はリターンする
@@ -98,13 +98,21 @@ class Game extends React.Component {
             history: history.concat([{
                 squares: squares,
             }]),
+            stepNumber: 0,
             xIsNext: !this.state.xIsNext,
+        });
+    }
+
+    jumpTo(step) {
+        this.setState({
+            stepNumber: step,
+            xIsNext: (step % 2) === 0,
         });
     }
 
     render() {
         const history = this.state.history;
-        const current = history[history.length - 1];
+        const current = history[this.state.stepNumber]
 
         // 勝敗の判定
         const winner = calculateWinner(current.squares);
@@ -114,7 +122,11 @@ class Game extends React.Component {
                 'Go to move #' + move :
                 'Go to game start';
             return (
-                <li>
+                // reactは再レンダーの際、keyを参照する
+                // keyがなければコンポーネントを作成、無ければ破棄、変更があれば再作成される
+                // keyがあれば順番の入れ替わりにも対応できる
+                // keyは親子間でのみ一意。グローバルでの重複は許される
+                <li key={move}>
                     <button onClick={() => this.jumpTo(move)}>{desc}</button>
                 </li>
             );
